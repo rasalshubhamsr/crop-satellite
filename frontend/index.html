@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Crop Classification - ML Pipeline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .map-layer-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            background: rgba(0,0,0,0.85);
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .layer-btn {
+            background: transparent;
+            color: #888;
+            border: 1px solid #444;
+            padding: 4px 8px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+        .layer-btn.active {
+            background: rgba(0,229,255,0.2);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .export-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .export-btn {
+            flex: 1;
+            padding: 6px;
+            background: #1e1e24;
+            color: #aaa;
+            border: 1px solid #444;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .export-btn:hover { background: #333; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="header">
+            <h1>Crop Classification using Satellite Images Pipeline</h1>
+            <p class="subtitle">System Architecture v1.0 | End-to-End Deep Learning Framework</p>
+        </header>
+
+        <div class="dashboard-grid">
+            
+            <!-- Sidebar: Configuration -->
+            <aside class="sidebar" style="width: 380px;">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    <h2>Project Pipeline Configuration</h2>
+                </div>
+                
+                <div class="controls" style="margin-top: 2rem;">
+                    <div class="control-group">
+                        <label>MODULE 1: DATA SOURCE (AOI)</label>
+                        <select id="mapSourceSelect">
+                            <option value="esri">Esri High-Res / Landsat Composite</option>
+                            <option value="google">Google Earth Engine Proxy</option>
+                            <option value="osm">OpenStreetMap</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>MODULE 4: CLASSIFICATION MODEL</label>
+                        <select id="modelSelect">
+                            <option value="cnn">Convolutional Neural Network (CNN)</option>
+                            <option value="rf">Random Forest (RF)</option>
+                            <option value="svm">Support Vector Machine (SVM)</option>
+                        </select>
+                    </div>
+                    
+                    <button id="runBtn" class="primary-btn" style="margin-top: 1.5rem; height: 50px;">INITIALIZE FULL 6-STEP PIPELINE</button>
+                </div>
+                
+                <!-- PIPELINE VISUALIZER MOVED TO SIDEBAR TO MAKE ROOM FOR CHART -->
+                <div class="glass-panel" style="margin-top: 2rem; padding: 1rem; flex: 1; border: none; background: transparent;">
+                    <h3 class="panel-title" style="font-size: 0.75rem;">PIPELINE EXECUTION TRACE</h3>
+                    <ul class="pipeline-list" id="pipelineSteps">
+                        <li id="step1" class="step pending">M1: Data Collection (GEE / Sentinel)</li>
+                        <li id="step2" class="step pending">M2: Pre-Processing (Cloud Mask / NDVI)</li>
+                        <li id="step3" class="step pending">M3: Feature Extraction (Temporal/NDVI)</li>
+                        <li id="step4" class="step pending">M4: Classification (ML/DL Inference)</li>
+                        <li id="step5" class="step pending">M5: Evaluation Analytics</li>
+                        <li id="step6" class="step pending">M6: Data Storage & Visualization</li>
+                    </ul>
+                    
+                    <div id="exportGroup" class="export-btn-group hidden">
+                        <button id="btnGeoTiff" class="export-btn">⬇ Export GeoTIFF</button>
+                        <button id="btnPdf" class="export-btn">⬇ Export PDF Report</button>
+                    </div>
+                </div>
+                
+            </aside>
+
+            <!-- Center: Map AOI & Masks -->
+            <div class="map-container">
+                <div class="map-header">
+                    <h3>GEOSPATIAL AREA OF INTEREST (AOI)</h3>
+                </div>
+                
+                <div class="map-layer-controls hidden" id="layerControls">
+                    <div style="margin-bottom: 8px; color: #fff;">Overlay Select</div>
+                    <button class="layer-btn active" id="layerClassified">Crop Classification</button>
+                    <button class="layer-btn" id="layerNDVI">NDVI Feature Map</button>
+                    <button class="layer-btn" id="layerRaw">Raw Image (AOI Only)</button>
+                </div>
+                
+                <div class="loader hidden" id="mapLoader" style="position:absolute; top: 1rem; left: 240px; z-index:1000; background: rgba(0,0,0,0.8); padding: 0.5rem; border: 1px solid var(--border-color);">
+                    <div class="spinner"></div><span style="color:var(--primary-color); font-size: 0.75rem;">Processing spectral inference...</span>
+                </div>
+                <div id="map" style="width: 100%; height: 100%; z-index: 1;"></div>
+            </div>
+            
+            <!-- Right Panel: Evaluation & Phenology (Module 3 & 5) -->
+            <div class="pipeline-column" style="width: 500px;">
+                
+                <!-- Phenology Chart (Missing Feature Added) -->
+                <div class="glass-panel" style="margin-bottom: 1rem;">
+                    <h3 class="panel-title">MODULE 3: MULTI-TEMPORAL PHENOLOGY</h3>
+                    <p style="font-size: 0.7rem; color: #888; margin-bottom: 0.5rem;">Time-series analysis monitoring crop growth patterns (NDVI Mean over 12 mo)</p>
+                    <div style="height: 180px; width: 100%; position: relative;">
+                         <canvas id="phenologyChart"></canvas>
+                         <div id="chartPlaceholder" style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#555; font-size: 0.8rem; font-family: monospace;">Awaiting Pipeline Execution...</div>
+                    </div>
+                </div>
+                
+                <!-- Evaluation Metrics -->
+                <div class="glass-panel" style="flex: 1; display: flex; flex-direction: column;">
+                    <h3 class="panel-title">MODULE 5: EVALUATION OUTPUTS</h3>
+                    
+                    <div id="emptyEvalState" style="text-align: center; color: var(--text-secondary); padding: 2rem; font-size: 0.85rem;">
+                        Awaiting Pipeline Execution...
+                    </div>
+
+                    <div id="metricsContainer" class="metrics-grid hidden" style="margin-top: 1rem;">
+                        <div class="metric-box">
+                            <span class="metric-label">Overall Acc.</span>
+                            <span class="metric-value" id="valAcc">--%</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">F1-Score</span>
+                            <span class="metric-value" id="valF1">--</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Precision</span>
+                            <span class="metric-value" id="valPrec">--</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Recall</span>
+                            <span class="metric-value" id="valRec">--</span>
+                        </div>
+                        <div class="metric-box" style="grid-column: 1 / -1;">
+                            <span class="metric-label">Kappa Coefficient</span>
+                            <span class="metric-value" id="valKap">--</span>
+                        </div>
+                        
+                        <div class="metric-box" style="grid-column: 1 / -1; padding: 1rem;">
+                            <span class="metric-label" style="margin-bottom: 0.5rem;">CONFUSION MATRIX [Rice, Wheat, Sugar]</span>
+                            <table class="cm-table">
+                                <tbody id="cmBody">
+                                    <tr><td>--</td><td>--</td><td>--</td></tr>
+                                    <tr><td>--</td><td>--</td><td>--</td></tr>
+                                    <tr><td>--</td><td>--</td><td>--</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="legendContainer" class="legend hidden" style="margin-top: auto;">
+                        <div class="legend-item"><span class="color-box" style="background: rgba(46, 204, 113, 0.8)"></span> RICE CROP</div>
+                        <div class="legend-item"><span class="color-box" style="background: rgba(241, 196, 15, 0.8)"></span> WHEAT CROP</div>
+                        <div class="legend-item"><span class="color-box" style="background: rgba(39, 174, 96, 0.8)"></span> SUGARCANE</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html>

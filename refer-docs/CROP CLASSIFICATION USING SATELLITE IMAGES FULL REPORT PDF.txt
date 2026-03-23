@@ -1,0 +1,340 @@
+CROP CLASSIFICATION USING SATELLITE IMAGES FULL REPORT 
+1. Introduction 
+1.1 Introduction 
+Agriculture has always been the cornerstone of human civilization, providing 
+food, raw materials, and livelihoods for billions of people worldwide. In 
+developing countries such as India, agriculture not only ensures food security 
+but also plays a significant role in economic development. With increasing 
+population pressures, climate variability, and limited resources, there is a 
+growing demand for accurate, timely, and large-scale monitoring of 
+agricultural activities. One of the most crucial aspects of agricultural 
+monitoring is crop classification, which involves identifying, mapping, and 
+categorizing different crop types across a specific geographic region. Crop 
+classification serves multiple purposes in the agricultural domain. It enables 
+policymakers and researchers to estimate crop acreage, analyze cropping 
+patterns, assess seasonal variability, and forecast yields. For farmers, it 
+provides valuable insights into crop health, stress conditions, and 
+management practices. Governments and agencies also rely on accurate crop 
+classification to plan procurement, trade policies, and subsidies, ensuring 
+effective 
+distribution 
+of 
+resources 
+and 
+food 
+supply 
+management. 
+Traditionally, crop classification was carried out through field surveys and 
+manual data collection. While effective at a local scale, these methods are 
+time-consuming, labor-intensive, and often prone to errors. With the advent of 
+modern technologies, especially remote sensing and satellite imagery, the 
+process has undergone a remarkable transformation. High-resolution 
+multispectral and hyperspectral satellite data allow large-scale, repeatable, 
+and objective monitoring of crops over vast geographical areas. When 
+combined with geographic information systems (GIS), machine learning, 
+and deep learning algorithms, these technologies enhance the accuracy and 
+reliability of crop classification.In recent years, the use of vegetation indices 
+such as the Normalized Difference Vegetation Index (NDVI), texture features, 
+and temporal growth patterns derived from satellite images has further 
+strengthened crop identification processes. These advancements not only 
+improve precision agriculture but also help address global challenges like 
+climate change adaptation, water resource management, and food security 
+planning.Thus, crop classification has evolved from a manual, small-scale 
+practice to an advanced, technology-driven process that supports sustainable 
+agricultural management. Its significance extends beyond local farming 
+communities to national and global levels, making it a vital component of 
+modern agricultural research and policy formulation. 
+ 
+1.2 Problem Description 
+Despite the critical role of agriculture in ensuring food security and economic 
+stability, monitoring and classifying crops at large scales remain a challenge. 
+Traditional field-based surveys are labor-intensive, time-consuming, and limited 
+in spatial coverage, leading to delays and inaccuracies in crop data. While 
+satellite imagery provides a promising alternative, variability in spectral 
+signatures, 
+seasonal 
+changes, 
+and 
+atmospheric 
+disturbances 
+introduce 
+complexities in accurate classification. Furthermore, the lack of a fully 
+automated, scalable, and cost-effective framework limits the transformation of 
+raw satellite data into actionable insights, thereby hampering timely agricultural 
+planning, yield forecasting, and resource allocation. Hence, there is a pressing 
+need for a robust and technology-driven crop classification system that leverages 
+satellite imagery with advanced computational techniques to deliver accurate, 
+timely, and scalable solutions for sustainable agricultural management. 
+ 
+1.3 Problem Statement 
+ 
+Design and develop a machine learning-based system for crop classification using 
+satellite images to achieve accurate, automated, and large-scale crop monitoring. 
+Accurate crop classification is essential for effective agricultural planning, yield 
+forecasting, and resource management. However, traditional field surveys are slow, 
+costly, and limited in coverage, while satellite imagery, though promising, faces 
+challenges such as spectral variability, seasonal changes, and cloud interference. The 
+absence of an automated, scalable, and cost-efficient framework restricts the timely 
+conversion of satellite data into actionable insights. Therefore, there is a need for a 
+robust crop classification system that integrates satellite imagery with advanced 
+machine learning and deep learning techniques to enable precise, timely, and large-
+scale agricultural monitoring. 
+ 
+1.4 Objectives 
+• Develop an automated framework for accurate classification of different crop types 
+using satellite imagery. 
+• Preprocess and enhance satellite data by removing noise, clouds, and distortions for 
+improved feature extraction. 
+• Apply machine learning and deep learning techniques for effective crop identification 
+and classification. 
+• Evaluate classification accuracy using ground truth data and satellite imagery. 
+• Provide a scalable and cost-efficient solution supporting agricultural planning and 
+sustainable management. 
+ 
+1.5 Scope 
+The proposed system aims to classify crops automatically using satellite images and 
+machine learning models. It will process multi-spectral images, extract relevant features, 
+and classify crops across regions. The application supports farmers, researchers, and 
+policymakers in resource management, yield forecasting, and planning. 
+ 
+ 
+ 
+ 
+2. Overall Description 
+2.1 Product Perspective 
+The product will be a software system integrating remote sensing data analysis with 
+machine learning. It consists of modules for data collection, preprocessing, classification, 
+and evaluation. It will utilize tools like Google Earth Engine, QGIS, and Python libraries 
+such as TensorFlow and Scikit-learn. 
+2.1.1 Hardware Requirements 
+• Processor: Intel i5 or above 
+• RAM: 8 GB minimum 
+• Hard Disk: 500 GB minimum 
+• GPU: Optional for deep learning models 
+2.1.2 Software Requirements 
+• Operating System: Windows / Linux 
+• Google Earth Engine (GEE) 
+• QGIS with Semi-Automatic Classification Plugin 
+• Python with OpenCV, TensorFlow/Keras, and Scikit-learn 
+2.2 Product Functions 
+• Collect and manage satellite imagery datasets from sources like Sentinel and Landsat 
+for specific agricultural regions and time periods. 
+• Preprocess images to remove noise, clouds, and atmospheric distortions, ensuring 
+high-quality data for analysis. 
+• Perform time-series analysis on multi-temporal satellite images to monitor crop 
+growth patterns, detect phenological changes, and improve classification accuracy across 
+seasons. 
+• Apply machine learning models such as Support Vector Machine (SVM), Random 
+Forest (RF), and Convolutional Neural Networks (CNN) for accurate crop 
+classification. 
+• Evaluate classification performance using accuracy metrics such as Precision, 
+Recall, F1-Score, and Overall Accuracy to ensure model reliability. 
+• Display and visualize classified outputs through color-coded maps, charts, and 
+dashboards for easy interpretation and decision-making by users and policymakers. 
+ 
+ 
+3. Specific Requirements 
+3.1 External Interfaces 
+Inputs: Satellite imagery data, ground truth datasets. 
+Outputs: Classified crop maps, accuracy reports, and performance metrics. 
+3.2 Functional Requirements 
+• The system shall collect satellite images from designated sources. 
+• The system shall preprocess images to enhance clarity and reduce distortion. 
+• The system shall classify crops based on spectral and temporal patterns using ML/DL 
+models. 
+• The system shall evaluate classification performance using statistical metrics. 
+• The system shall generate visual maps and reports for user interpretation. 
+3.3 Performance Requirements 
+The system should process images efficiently with minimal latency, supporting batch 
+operations. It should handle large datasets, maintain high accuracy (>90%), and scale 
+across multiple regions. 
+3.4 Design Constraints 
+Limited training data, cloud cover interference, and computational resource constraints 
+may affect performance. System design must ensure compatibility with open-source data 
+and software tools. 
+3.5 Logical Database Requirements 
+The proposed system utilizes PostgreSQL as the primary database management system, 
+integrated with the PostGIS spatial extension to efficiently handle geospatial data. The 
+database is designed to store and manage various components of the crop classification 
+workflow, including metadata of satellite images, extracted features, classification 
+outputs, and evaluation metrics. 
+3.6 Software System Attributes 
+3.6.1 Reliability 
+The system shall ensure reliable and consistent crop classification results under varying 
+conditions and datasets. 
+It should maintain data integrity and deliver repeatable outcomes across multiple runs. 
+Regular validation and error-handling mechanisms will minimize classification 
+inaccuracies and system failures. 
+3.6.2 Availability 
+The system shall be designed for continuous availability, ensuring at least 99% uptime 
+for data analysis and reporting operations. 
+Scheduled maintenance and updates will be managed with minimal downtime. 
+It should be capable of recovering quickly from unexpected interruptions or data source 
+failures. 
+3.6.3 Security 
+System access shall be restricted to authenticated and authorized users through secure 
+login credentials. 
+Data transmission between modules must be encrypted to prevent unauthorized access or 
+tampering. 
+Regular audits and access logs will help monitor and protect sensitive datasets and model 
+results. 
+3.6.4 Maintainability 
+The software architecture shall support modular design, allowing for easy updates, bug 
+fixes, and enhancements. 
+Machine learning models can be retrained or replaced without affecting other 
+components. 
+Proper documentation and version control will ensure that maintenance and scalability 
+remain efficient. 
+3.6.5 Portability 
+The system shall be platform-independent and easily deployable across Windows, Linux, 
+and cloud environments. 
+All dependencies and libraries will be open-source or cross-compatible to ensure smooth 
+portability. 
+Containerization tools (e.g., Docker) or cloud integration may be used to simplify 
+deployment and scalability. 
+ 
+ 
+4. Software Design Document 
+4.1. Structural Design  
+a. Class Diagrams 
+                
+ 
+b. Object Diagrams 
+ 
+ 
+ 
+4.2. Data Design 
+a. Data-flow Diagram 
+ 
+ Level 0 DFD: 
+ 
+ 
+ 
+ Level 1 DFD: 
+ 
+ 
+Level 2 DFD: 
+ 
+4.3 Behavioural Design 
+a. Sequence Diagram 
+ 
+ 
+ 
+ 
+ 
+b. Collaboration diagram 
+ 
+c. Activity Diagram 
+ 
+ 
+d. State-chart diagram 
+ 
+ 
+4.3. Implementation Design 
+a. Component Diagram 
+ 
+ 
+ 
+ 
+4.4. Environment Design 
+ 
+   a. Deployment Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+5. Algorithms for Functional Requirements 
+ 
+1: Data Collection Module 
+Objective: Acquire multispectral satellite images for a given region and time range. 
+Input: Area of Interest (AOI), Start Date, End Date 
+Output: Preprocessed image collection (median composite) 
+Steps: 
+1. Define the Area of Interest (AOI) coordinates. 
+2. Set the time period for the desired crop season. 
+3. Access the Sentinel-2 or Landsat image collection from Google Earth Engine 
+(GEE). 
+4. Filter images based on: 
+o AOI 
+o Date range 
+o Cloud coverage < 20 %. 
+5. Generate a median composite image to minimize cloud and atmospheric noise. 
+6. Return the composite image for preprocessing. 
+ 2: Pre-processing Module 
+Objective: Prepare satellite imagery by removing noise and enhancing quality. 
+Input: Raw composite satellite image 
+Output: Clean, analysis-ready image 
+Steps: 
+1. Perform cloud masking using QA60 or cloud probability bands. 
+2. Apply radiometric and atmospheric correction (e.g., surface reflectance). 
+3. Normalize spectral bands to reduce brightness differences. 
+4. Calculate vegetation indices (e.g., NDVI = (NIR – RED)/(NIR + RED)). 
+5. Clip image to AOI boundaries. 
+6. Store preprocessed image for feature extraction. 
+3: Feature Extraction Module 
+Objective: Derive relevant spectral, temporal, and textural features for crop 
+identification. 
+Input: Preprocessed image collection 
+Output: Feature vectors for each pixel or region 
+Steps: 
+1. Select key spectral bands: B2 (Blue), B3 (Green), B4 (Red), B8 (NIR). 
+2. Compute vegetation indices such as NDVI, EVI, and SAVI. 
+3. Extract temporal features (average, standard deviation over time). 
+4. Generate texture measures (entropy, contrast) from NDVI layer. 
+5. Combine all computed features into a feature vector dataset. 
+6. Store feature vectors in the feature database. 
+ 4: Classification Module 
+Objective: Classify crop types using machine learning or deep learning techniques. 
+Input: Feature vectors, labeled training data 
+Output: Crop classification map 
+Steps: 
+1. Load ground-truth samples or field survey data with crop labels. 
+2. Split dataset into training (70 %) and testing (30 %) sets. 
+3. Select and initialize a classifier (e.g., Random Forest, SVM, CNN). 
+4. Train the model using training features and crop labels. 
+5. Apply the trained model to unclassified satellite image pixels. 
+6. Generate a classified image assigning crop types to each pixel. 
+7. Store classification output for evaluation. 
+ 5: Evaluation Module 
+Objective: Assess the accuracy and performance of the classification results. 
+Input: Classified image, ground-truth data 
+Output: Accuracy metrics and confusion matrix 
+Steps: 
+1. Compare predicted crop labels with validation ground-truth samples. 
+2. Generate a confusion matrix with actual vs. predicted classes. 
+3. Compute accuracy metrics: 
+o Overall Accuracy 
+o Precision 
+o Recall 
+o F1-Score 
+o Kappa Coefficient 
+4. Identify misclassified regions for model improvement. 
+5. Display performance metrics and classification map to the user. 
+6. Export final results to GeoTIFF or report format. 
+ 6: Data Storage and Visualization 
+Objective: Store processed data and visualize outputs for end-users. 
+Input: Classified maps, evaluation results 
+Output: Visualized crop map and stored records 
+Steps: 
+1. Save all images and results to the local or cloud database. 
+2. Visualize classified maps with distinct color palettes per crop. 
+3. Overlay crop boundaries, AOI, and NDVI on the map. 
+4. Provide download/export options (GeoTIFF, CSV, or PDF report). 
+5. End process. 
+ 
+6. References 
+ 
+• Dharmendra Singh, Parmod Kumar, 'Mapping of Rice Crop using Synthetic Aperture 
+Radar (SAR) Data'. 
+• Sherrie Wang, Mutlu Ozdogan, 'Field-Scale Rice Area and Yield Mapping in Sri Lanka 
+with Optical Remote Sensing and Limited Training Data', Remote Sens. 2025. 
+• Megharani Mayani, Rajeshwari Itagi, 'Sugarcane acreage estimation using satellite 
+imagery and machine learning'. 

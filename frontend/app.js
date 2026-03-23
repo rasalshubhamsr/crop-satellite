@@ -17,6 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportGroup = document.getElementById('exportGroup');
     const layerControls = document.getElementById('layerControls');
     
+    // Project Info Modal Logic
+    const infoModal = document.getElementById('infoModal');
+    const infoBtn = document.getElementById('infoBtn');
+    const closeInfoBtn = document.getElementById('closeInfoBtn');
+    
+    if (infoBtn) infoBtn.addEventListener('click', () => infoModal.classList.remove('hidden'));
+    if (closeInfoBtn) closeInfoBtn.addEventListener('click', () => infoModal.classList.add('hidden'));
+    
     // Map Setup
     const map = L.map('map').setView([21.1458, 79.0882], 5);
     const layers = {
@@ -77,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         layerControls.classList.add('hidden');
         exportGroup.classList.add('hidden');
+        document.getElementById('agronomicPanel').classList.add('hidden');
         steps.forEach(s => { s.className = 'step pending'; });
         emptyEvalState.classList.remove('hidden');
         emptyEvalState.innerText = "Executing Base Modules...";
@@ -154,6 +163,25 @@ document.addEventListener('DOMContentLoaded', () => {
             // Module 6 Data Storage & UI actions
             steps[5].className = 'step active'; await delay(400); steps[5].className = 'step complete';
             exportGroup.classList.remove('hidden');
+            
+            // Populate Agronomic Context Engine
+            document.getElementById('agronomicPanel').classList.remove('hidden');
+            const agro = data.agronomic_context;
+            const centerLat = (bounds.getSouth() + bounds.getNorth()) / 2;
+            const centerLng = (bounds.getWest() + bounds.getEast()) / 2;
+            document.getElementById('agroCoords').innerText = `[${centerLat.toFixed(5)}, ${centerLng.toFixed(5)}]`;
+            document.getElementById('agroSeason').innerText = agro.season.toUpperCase();
+            document.getElementById('agroSoil').innerText = agro.soil_type.toUpperCase();
+            
+            let probHtml = "";
+            agro.probabilities.forEach(p => {
+                probHtml += `<div style="display: flex; justify-content: space-between; border-bottom: 1px dotted #555; padding-bottom: 4px;">
+                    <span style="color: #ddd">${p.crop} Target</span>
+                    <strong style="color: var(--primary-color);">${p.prob}%</strong>
+                </div>`;
+            });
+            document.getElementById('agroProbsList').innerHTML = probHtml;
+            document.getElementById('agroReasoning').innerText = agro.reasoning;
 
         } catch (error) {
             console.error(error);
@@ -187,6 +215,75 @@ document.addEventListener('DOMContentLoaded', () => {
         if (overlays.ndvi) map.removeLayer(overlays.ndvi);
     });
     
+    // Interactive Map Feature Identification (Dynamic Analytics Overlay)
+    const analysisOverlay = document.getElementById('analysisOverlay');
+    const closeAnalysisBtn = document.getElementById('closeAnalysisBtn');
+    const analysisSpinner = document.getElementById('analysisSpinner');
+    const analysisZoomImg = document.getElementById('analysisZoomImg');
+    
+    closeAnalysisBtn.addEventListener('click', () => {
+        analysisOverlay.classList.add('hidden');
+    });
+
+    map.on('click', async (e) => {
+        if (!runBtn.disabled && (!steps[3].className.includes('complete'))) {
+            // Optional: prevent fetching if pipeline hasn't run, but we can allow it for exploration
+            // alert('Please run the pipeline first before identifying features.');
+            // return;
+        }
+
+        const { lat, lng } = e.latlng;
+        
+        // Show Overlay in Loading State
+        analysisOverlay.classList.remove('hidden');
+        analysisSpinner.style.display = 'block';
+        analysisZoomImg.style.display = 'none';
+        
+        document.getElementById('analysisClass').innerText = "Analyzing...";
+        document.getElementById('analysisClass').style.color = "#fff";
+        document.getElementById('analysisConf').innerText = "--%";
+        document.getElementById('analysisNDVI').innerText = "--";
+        document.getElementById('analysisR').innerText = "--";
+        document.getElementById('analysisG').innerText = "--";
+        document.getElementById('analysisB').innerText = "--";
+        document.getElementById('analysisCoords').innerText = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+            
+        try {
+            const response = await fetch('/api/identify-pixel', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat, lng, model_type: modelSelect.value })
+            });
+            const data = await response.json();
+            
+            analysisSpinner.style.display = 'none';
+            if(data.thumbnail_base64) {
+                analysisZoomImg.src = "data:image/png;base64," + data.thumbnail_base64;
+                analysisZoomImg.style.display = 'block';
+            }
+            
+            document.getElementById('analysisClass').innerText = data.class_name;
+            
+            // Color code the class text for effect
+            if(data.class_name.includes("Rice")) document.getElementById('analysisClass').style.color = "#2ecc71";
+            else if(data.class_name.includes("Wheat")) document.getElementById('analysisClass').style.color = "#f1c40f";
+            else if(data.class_name.includes("Sugarcane")) document.getElementById('analysisClass').style.color = "#27ae60";
+            else if(data.class_name.includes("Road")) document.getElementById('analysisClass').style.color = "#e74c3c";
+            else if(data.class_name.includes("Soil")) document.getElementById('analysisClass').style.color = "#a0522d";
+            
+            document.getElementById('analysisConf').innerText = data.confidence + '%';
+            document.getElementById('analysisNDVI').innerText = data.spectral_signature.NDVI.toFixed(3);
+            document.getElementById('analysisR').innerText = data.spectral_signature.R;
+            document.getElementById('analysisG').innerText = data.spectral_signature.G;
+            document.getElementById('analysisB').innerText = data.spectral_signature.B;
+            
+        } catch (err) {
+            analysisSpinner.style.display = 'none';
+            document.getElementById('analysisClass').innerText = "Analysis Failed";
+            document.getElementById('analysisClass').style.color = "#e74c3c";
+        }
+    });
+
     // Export actions
     document.getElementById('btnGeoTiff').addEventListener('click', () => { alert("Simulating generation of massive GeoTIFF spatial payload... Export successful."); });
     document.getElementById('btnPdf').addEventListener('click', () => { alert("Simulating compilation of Multi-Spectral Analysis Academic PDF Report... Download triggered."); });

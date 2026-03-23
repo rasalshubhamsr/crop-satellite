@@ -60,9 +60,12 @@
 <body>
     <div class="app-container">
         
-        <header class="header">
-            <h1>Crop Classification using Satellite Images Pipeline</h1>
-            <p class="subtitle">System Architecture v1.0 | End-to-End Deep Learning Framework</p>
+        <header class="header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>Crop Classification using Satellite Images Pipeline</h1>
+                <p class="subtitle">System Architecture v1.0 | End-to-End Deep Learning Framework</p>
+            </div>
+            <button id="infoBtn" class="primary-btn" style="width: auto; padding: 0.5rem 1rem; font-size: 0.75rem; border-color: var(--text-secondary); color: var(--text-primary);">ℹ️ PROJECT OVERVIEW</button>
         </header>
 
         <div class="dashboard-grid">
@@ -88,6 +91,7 @@
                         <label>MODULE 4: CLASSIFICATION MODEL</label>
                         <select id="modelSelect">
                             <option value="cnn">Convolutional Neural Network (CNN)</option>
+                            <option value="lstm">Long Short-Term Memory (LSTM)</option>
                             <option value="rf">Random Forest (RF)</option>
                             <option value="svm">Support Vector Machine (SVM)</option>
                         </select>
@@ -194,6 +198,8 @@
                         <div class="legend-item"><span class="color-box" style="background: rgba(46, 204, 113, 0.8)"></span> RICE CROP</div>
                         <div class="legend-item"><span class="color-box" style="background: rgba(241, 196, 15, 0.8)"></span> WHEAT CROP</div>
                         <div class="legend-item"><span class="color-box" style="background: rgba(39, 174, 96, 0.8)"></span> SUGARCANE</div>
+                        <div class="legend-item"><span class="color-box" style="background: rgba(231, 76, 60, 0.8)"></span> INFRASTRUCTURE / ROAD</div>
+                        <div class="legend-item"><span class="color-box" style="background: rgba(160, 82, 45, 0.8)"></span> BARE SOIL / OPEN SPACE</div>
                     </div>
 
                 </div>
@@ -202,7 +208,114 @@
         </div>
     </div>
     
+    <!-- PROJECT OVERVIEW MODAL -->
+    <div id="infoModal" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; width: 600px; max-width: 90%; padding: 2rem; position: relative;">
+            <button id="closeInfoBtn" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;">&times;</button>
+            
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.25rem;">CROP CLASSIFICATION USING SATELLITE IMAGES</h2>
+            
+            <div style="max-height: 60vh; overflow-y: auto; padding-right: 1rem; color: var(--text-primary); font-size: 0.85rem; line-height: 1.6;">
+                <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1rem;">INTRODUCTION</h3>
+                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Agriculture is the backbone of many economies, including India. The project "Crop Classification Using Satellite Images" focuses on using remote sensing and machine learning to automatically identify crop types. It enables accurate, large-scale crop monitoring, reduces manual surveys, and supports better agricultural planning and decision-making.</p>
+                
+                <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1rem;">PROBLEM STATEMENT</h3>
+                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Farmers, researchers, and government bodies lack an automated, scalable, and cost-efficient system to classify and monitor different crop types over large areas using satellite imagery. Without timely and accurate crop data, planning and resource distribution become inefficient.</p>
+                
+                <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1rem;">SOLUTION</h3>
+                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">This project aims to solve this by using satellite imagery and machine learning to classify crops over large geographical areas automatically.</p>
+                
+                <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1rem;">OBJECTIVES</h3>
+                <ul style="margin-bottom: 1.5rem; color: var(--text-secondary); padding-left: 1.2rem;">
+                    <li>To develop an automated system to classify crop types using satellite images.</li>
+                    <li>To Enable real-time, large-scale agricultural monitoring.</li>
+                    <li>To Support government in subsidies, and planning.</li>
+                </ul>
+                
+                <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1rem;">TECHNOLOGY STACK</h3>
+                <p style="color: var(--text-secondary);"><strong>Satellite Data:</strong> Sentinel-2, Sentinel-1, PlanetScope<br>
+                <strong>Programming:</strong> Python, Google Earth Engine<br>
+                <strong>Machine Learning:</strong> Random Forest, SVM, CNN, LSTM<br>
+                <strong>Tools:</strong> QGIS, SNAP, scikit-learn, TensorFlow, Keras</p>
+            </div>
+        </div>
+
+        <!-- AGRONOMIC EXPERT SYSTEM PANEL -->
+        <div id="agronomicPanel" class="glass-panel hidden" style="margin-top: 1rem; border-top: 4px solid var(--primary-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                    <h3 class="panel-title" style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 0.25rem;">AGRONOMIC EXPERT SYSTEM: CONTEXTUAL FALLBACK ENGINE</h3>
+                    <p style="font-size: 0.75rem; color: #888; font-family: monospace;">Real-time deterministic calculation resolving crop identities strictly via geospatial, temporal, and edaphic vectors.</p>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 1.5rem;">
+                
+                <!-- Geographical Factors -->
+                <div style="background: rgba(0,0,0,0.4); padding: 1.5rem; border-radius: 4px; border: 1px solid #333;">
+                    <h4 style="color: #ccc; font-size: 0.8rem; margin-bottom: 1rem; border-bottom: 1px solid #444; padding-bottom: 0.5rem;">ENVIRONMENTAL VECTORS</h4>
+                    <div style="margin-bottom: 0.75rem;"><span style="color: #666; font-size: 0.75rem; display: block;">Geo-Coordinates (Center AOI)</span> <strong id="agroCoords" style="color: #fff; font-family: monospace;">--</strong></div>
+                    <div style="margin-bottom: 0.75rem;"><span style="color: #666; font-size: 0.75rem; display: block;">Identified Agricultural Season</span> <strong id="agroSeason" style="color: #00e5ff; font-family: monospace;">--</strong></div>
+                    <div><span style="color: #666; font-size: 0.75rem; display: block;">Edaphic Topography (Soil Type)</span> <strong id="agroSoil" style="color: #e67e22; font-family: monospace;">--</strong></div>
+                </div>
+                
+                <!-- Calculated Probabilities -->
+                <div style="background: rgba(0,0,0,0.4); padding: 1.5rem; border-radius: 4px; border: 1px solid #333;">
+                    <h4 style="color: #ccc; font-size: 0.8rem; margin-bottom: 1rem; border-bottom: 1px solid #444; padding-bottom: 0.5rem;">HEURISTIC CROP PROBABILITIES</h4>
+                    <div id="agroProbsList" style="font-family: monospace; font-size: 0.85rem; color: #fff; display: flex; flex-direction: column; gap: 0.5rem;">
+                        Waiting for context...
+                    </div>
+                </div>
+                
+                <!-- Algorithmic Reasoning -->
+                <div style="background: rgba(0,229,255,0.05); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(0,229,255,0.2);">
+                    <h4 style="color: var(--primary-color); font-size: 0.8rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 0.5rem;">TECHNICAL AGRONOMIC REASONING</h4>
+                    <p id="agroReasoning" style="color: #ddd; font-size: 0.85rem; line-height: 1.6; font-family: 'Inter', sans-serif;">
+                        Waiting for context engine execution...
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- DYNAMIC PIXEL ANALYSIS OVERLAY -->
+    <div id="analysisOverlay" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: var(--bg-surface); border: 1px solid var(--primary-color); border-radius: 8px; width: 600px; padding: 2rem; position: relative; display: flex; gap: 2rem;">
+            <button id="closeAnalysisBtn" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;">&times;</button>
+            
+            <!-- Magni-Zoomed Image Area -->
+            <div style="flex: 0 0 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="width: 200px; height: 200px; border: 2px solid var(--primary-color); overflow: hidden; border-radius: 4px; position:relative; background: rgba(0,0,0,0.5);">
+                    <div class="spinner" id="analysisSpinner" style="position:absolute; top: 50%; left: 50%; width: 30px; height: 30px; margin-top: -15px; margin-left: -15px;"></div>
+                    <img id="analysisZoomImg" style="width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; display: none;" />
+                </div>
+                <span id="analysisCoords" style="font-family: monospace; font-size: 0.65rem; color: #888; margin-top: 8px;">Waiting for coordinate...</span>
+            </div>
+            
+            <!-- Details Area -->
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="color: var(--primary-color); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 0.5rem; text-transform: uppercase;">Real-Time Spectral Analysis</h3>
+                
+                <h2 id="analysisClass" style="color: #fff; font-size: 1.5rem; margin-bottom: 0.5rem;">Awaiting Data...</h2>
+                <div style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem;">Confidence: <span id="analysisConf" style="color: #fff; font-weight: bold;">--%</span></div>
+                
+                <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                    <div style="color: #aaa; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px;">SPECTRAL CORE SIGNATURE</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>NDVI:</span> <strong id="analysisNDVI" style="color: var(--primary-color);">--</strong></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>RED Band:</span> <strong id="analysisR">--</strong></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>GREEN Band:</span> <strong id="analysisG">--</strong></div>
+                    <div style="display: flex; justify-content: space-between;"><span>BLUE Band:</span> <strong id="analysisB">--</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="app.js"></script>
+    <style>
+        .hidden { display: none !important; }
+    </style>
 </body>
 </html>
